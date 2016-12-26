@@ -64,12 +64,39 @@ HANGMANPICS = ['''
   / \  |
        |
  =========''']
-words = 'ant baboon badger bat bear beaver camel cat clam cobra cougar coyote crow deer dog donkey duck eagle ferret fox frog goat goose hawk lion lizard llama mole monkey moose mouse mule newt otter owl panda parrot pigeon python rabbit ram rat raven rhino salmon seal shark sheep skunk sloth snake spider stork swan tiger toad trout turkey turtle weasel whale wolf wombat zebra'.split()
+words = {0: 'Ant', 1: 'Baboon', 2: 'Badger',
+    3: 'Bat', 4: 'Bear', 5: 'Beaver',
+    6: 'Camel', 7: 'Cat'}
 
+victoria = {'Name': 'victoria',
+    'Tip_1': 'Lalala',
+    'Tip_2': 'Lalala',
+    'Tip_3': 'Lalala'
+    }
+edward = {'Name': 'edward',
+    'Tip_1': 'Lalala',
+    'Tip_2': 'Lalala',
+    'Tip_3': 'Lalala'
+    }
+george = {'Name': 'george',
+    'Tip_1': 'Lalala',
+    'Tip_2': 'Lalala',
+    'Tip_3': 'Lalala'
+    }
+
+royals = {0: victoria, 1: edward, 2: george}
+
+"""
 def getRandomWord(wordList):
     # This function returns a random string from the passed list of strings.
     wordIndex = random.randint(0, len(wordList) - 1)
     return wordList[wordIndex]
+"""
+
+def getRandomWord(wordList):
+    # This function returns a random string from the passed list of strings.
+    wordIndex = random.randint(0, len(wordList) - 1)
+    return wordList[wordIndex]['Name']
 
 def displayBoard(HANGMANPICS, missedLetters, correctLetters, secretWord):
     print HANGMANPICS[len(missedLetters)]
@@ -117,7 +144,8 @@ def playAgain():
 print('H A N G M A N')
 missedLetters = ""
 correctLetters = ""
-secretWord = getRandomWord(words)
+#secretWord = getRandomWord(words)
+secretWord = getRandomWord(royals) #test
 gameIsDone = False
 print secretWord
 
@@ -154,6 +182,7 @@ while True:
             missedLetters = ''
             correctLetters = ''
             gameIsDone = False
-            secretWord = getRandomWord(words)
+            # secretWord = getRandomWord(words)
+            secretWord = getRandomWord(royals) #test
         else:
             break
