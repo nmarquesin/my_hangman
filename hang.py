@@ -64,41 +64,48 @@ HANGMANPICS = ['''
   / \  |
        |
  =========''']
-words = {0: 'Ant', 1: 'Baboon', 2: 'Badger',
-    3: 'Bat', 4: 'Bear', 5: 'Beaver',
-    6: 'Camel', 7: 'Cat'}
 
 victoria = {'Name': 'victoria',
-    'Tip_1': 'Lalala',
-    'Tip_2': 'Lalala',
-    'Tip_3': 'Lalala'
+    1: 'Tip 1: She was a Queen.',
+    2: "Tip 2: She inherited the throne aged 18.",
+    3: 'Tip 3: She was raised under close supervision by her German-born mother.',
+    4: 'Tip 4: She was the daughter of Prince Edward, Duke of Kent and Strathearn.',
+    5: 'Tip 5: Her reign of 63 years and seven months is known as the Victorian era.'
     }
 edward = {'Name': 'edward',
-    'Tip_1': 'Lalala',
-    'Tip_2': 'Lalala',
-    'Tip_3': 'Lalala'
+    1: 'Tip 1: He was a King.',
+    2: 'Tip 2: He came to be known as the "uncle of Europe".',
+    3: 'Tip 3: He was fluent in French and German.',
+    4: 'Tip 4: He habitually smoked twenty cigarettes and twelve cigars a day.',
+    5: 'Tip 5: He died in 1910 in the midst of a constitutional crisis.'
     }
 george = {'Name': 'george',
-    'Tip_1': 'Lalala',
-    'Tip_2': 'Lalala',
-    'Tip_3': 'Lalala'
+    1: 'Tip 1: He was a King.',
+    2: 'Tip 2: He received lessons in constitutional history from J. R. Tanner.',
+    3: 'Tip 3: He inherited the throne at a politically turbulent time.',
+    4: 'Tip 4: He became the first monarch of the House of Windsor.',
+    5: 'Tip 5: He died aged 70.'
     }
 
 royals = {0: victoria, 1: edward, 2: george}
 
-"""
-def getRandomWord(wordList):
-    # This function returns a random string from the passed list of strings.
-    wordIndex = random.randint(0, len(wordList) - 1)
-    return wordList[wordIndex]
-"""
 
 def getRandomWord(wordList):
     # This function returns a random string from the passed list of strings.
     wordIndex = random.randint(0, len(wordList) - 1)
-    return wordList[wordIndex]['Name']
+    return wordList[wordIndex]['Name'], wordIndex
 
-def displayBoard(HANGMANPICS, missedLetters, correctLetters, secretWord):
+def tips(missedLetters, royalIndex):
+    if len(missedLetters) == 6:
+        return
+    else:
+        num = 0
+        for letter in missedLetters:
+            num += 1
+            print royals[royalIndex][num]
+        return
+
+def displayBoard(HANGMANPICS, missedLetters, correctLetters, secretWord, royalIndex):
     print HANGMANPICS[len(missedLetters)]
     print ""
     end = ' '
@@ -120,6 +127,8 @@ def displayBoard(HANGMANPICS, missedLetters, correctLetters, secretWord):
         wordis += letter + end
     print wordis
     print ""
+
+    tips(missedLetters, royalIndex)
 
 def getGuess(alreadyGuessed):
     # Returns the letter the player entered. This function makes sure the player entered a single letter, and not something else.
@@ -144,13 +153,11 @@ def playAgain():
 print('H A N G M A N')
 missedLetters = ""
 correctLetters = ""
-#secretWord = getRandomWord(words)
-secretWord = getRandomWord(royals) #test
+secretWord, code = getRandomWord(royals)
 gameIsDone = False
-print secretWord
 
 while True:
-    displayBoard(HANGMANPICS, missedLetters, correctLetters, secretWord)
+    displayBoard(HANGMANPICS, missedLetters, correctLetters, secretWord, code)
 
     # Let the player type in a letter.
     guess = getGuess(missedLetters + correctLetters)
@@ -165,14 +172,14 @@ while True:
                 foundAllLetters = False
                 break
         if foundAllLetters:
-            print('Yes! The secret word is "' + secretWord + '"! You have won!')
+            print('Yes! The secret royal is "' + secretWord + '"! You have won!')
             gameIsDone = True
     else:
         missedLetters = missedLetters + guess
 
         # Check if player has guessed too many times and lost
         if len(missedLetters) == len(HANGMANPICS) - 1:
-            displayBoard(HANGMANPICS, missedLetters, correctLetters, secretWord)
+            displayBoard(HANGMANPICS, missedLetters, correctLetters, secretWord, code)
             print('You have run out of guesses!\nAfter ' + str(len(missedLetters)) + ' missed guesses and ' + str(len(correctLetters)) + ' correct guesses, the word was "' + secretWord + '"')
             gameIsDone = True
 
@@ -182,7 +189,6 @@ while True:
             missedLetters = ''
             correctLetters = ''
             gameIsDone = False
-            # secretWord = getRandomWord(words)
-            secretWord = getRandomWord(royals) #test
+            secretWord, code = getRandomWord(royals)
         else:
             break
